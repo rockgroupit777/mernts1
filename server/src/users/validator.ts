@@ -19,9 +19,11 @@ export const userSchema = Joi.object({
   access_token: [
     Joi.string(),
     Joi.number()
-],
+  ],
   avatar: Joi.string().label("Avatar")
 })
   .with('email','password')
   .xor('password','access_token')
-  .with('password','repeatPassword')
+  .with('password','repeatPassword');
+
+

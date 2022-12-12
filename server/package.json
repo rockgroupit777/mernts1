@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start2": "ts-node src/index.ts",
+    "start2": "ts-node src/users/validator.ts",
     "start": "node dist",
     "watch": "tsc -w"
   },
