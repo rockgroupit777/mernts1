@@ -60,5 +60,82 @@ userSchema.pre("save", async function (this: UserDocument) {
   ): Promise<boolean> {
     return compare(password, this.password);
   };
+
+//rewwrite
+// Define the username validator
+const usernameValidator = async (username: string): Promise<boolean> => {
+  const userExists = await User.exists({ username });
+  return !userExists;
+};
+
+/*
+import mongoose, { Document, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
+
+// Define the interface for the User document
+interface IUser extends Document {
+  username: string;
+  email: string;
+  password: string;
+  hashPassword: (password: string) => Promise<void>;
+  comparePassword: (password: string) => Promise<boolean>;
+}
+
+// Define the username validator
+const usernameValidator = async (username: string): Promise<boolean> => {
+  const userExists = await User.exists({ username });
+  return !userExists;
+};
+
+// Define the user schema
+const userSchema = new Schema<IUser>({
+  username: {
+    type: String,
+    required: [true, "Username must be required"],
+    validate: {
+      validator: usernameValidator,
+      message: "Username already taken",
+    },
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: [true, "Email must be required"],
+    unique: true,
+    validate: {
+      validator: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+      message: "Invalid email format",
+    },
+  },
+  password: {
+    type: String,
+    required: [true, "Password must be required"],
+  },
+});
+
+// Hash the password before saving the user
+userSchema.methods.hashPassword = async function (password: string): Promise<void> {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  this.password = hashedPassword;
+};
+
+// Compare the provided password with the stored hashed password
+userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+  return bcrypt.compare(password, this.password);
+};
+
+// Pre-save middleware to hash the password
+userSchema.pre<IUser>('save', async function (next) {
+  if (this.isModified('password')) {
+    await this.hashPassword(this.password);
+  }
+  next();
+});
+
+// Create the User model
+const User = mongoose.model<IUser>('User', userSchema);
+export default User;
+*/
 const User = model<UserDocument, UserModel>("User", userSchema);
 export default User;
